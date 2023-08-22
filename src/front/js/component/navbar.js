@@ -1,19 +1,45 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Context } from "../store/appContext";
+import { Link, useNavigate } from "react-router-dom";
+import { Login } from "../component/login.jsx";
+import { Signup } from "../component/signup.jsx";
+import { Ciudades } from "../pages/ciudades";
+import "../../styles/navbar.css";
+import YMG from "../../img/YMG-logo.png";
 
 export const Navbar = () => {
-	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
-				</div>
-			</div>
-		</nav>
-	);
+  const { store, actions } = useContext(Context);
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    actions.logout();
+    navigate("/");
+  }
+
+  return (
+    <nav className="navbar">
+      <div className="container-fluid">
+        <Link to="/" className="navbar-brand">
+          <img src={YMG} className="logo" />
+        </Link>
+        <div className="ml-auto">
+          {store.auth === true ? (
+            <button className="btn btn-logout title" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className="btn btn-login title">
+                Login
+              </Link>
+              <Link to="/signup" className="btn btn-signup title">
+                Sign Up
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
 };
+  
